@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import clsx from 'clsx';
@@ -33,12 +33,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Component = ({ className, children, userStatus }) => {
+const Component = ({ className, children }) => {
   const classes = useStyles();
+  const [userStatus, setUserStatus] = useState(true);
+
+  const handleOnChange = (event) => {
+    console.log('event w funkcji', event, 'userStatus:', userStatus);
+    console.log('ddd');
+    if(event === 'true') {
+      setUserStatus(true);
+    } else {
+      setUserStatus(false);
+    }
+
+  };
   
 
   return (
     <div className={clsx(className, styles.root)}>
+      <select
+        name='statusUser'
+        id='isLogged'
+        onChange={(event) => handleOnChange(event.target.value)}
+      >
+        <option value='true'>View for logged user</option>
+        <option value='false'>View for unlogged user</option>
+      </select>
       
       <AppBar position='static'>
         <Toolbar className={styles.toolbar}>
@@ -47,7 +67,8 @@ const Component = ({ className, children, userStatus }) => {
             className={classes.menuButton}
             color='inherit'
             aria-label='menu'
-            href='/'
+            component={Link}
+            to={'/'}
           >
             <HomeIcon style={{ color: yellow[500] }} />
           </IconButton>
@@ -80,8 +101,8 @@ const Component = ({ className, children, userStatus }) => {
                 aria-controls='menu-appbar'
                 aria-haspopup='true'
                 color='inherit'
-                href='/'
-                label={'aaa'}
+                component={Link}
+                to={'/'}
               >
                 
 

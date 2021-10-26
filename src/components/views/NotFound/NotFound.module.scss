@@ -1,4 +1,16 @@
 @import '../../../styles/settings.scss';
 
-// .root {
-// }
+.root {
+    padding: 20px;
+    .title {
+      color: red;
+      text-align: center;
+    }
+    .button {
+      margin: 20px;
+    }
+    .button2{
+      display: flex;
+      justify-content: center;
+    }
+  }
