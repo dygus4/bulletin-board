@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import clsx from 'clsx';
@@ -33,32 +33,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Component = ({ className, children }) => {
+const Component = ({ className, children, userStatus }) => {
   const classes = useStyles();
-  const [userStatus, setUserStatus] = useState(true);
 
-  const handleOnChange = (event) => {
-    console.log('event w funkcji', event, 'userStatus:', userStatus);
-    console.log('ddd');
-    if(event === 'true') {
-      setUserStatus(true);
-    } else {
-      setUserStatus(false);
-    }
-
-  };
   
 
   return (
     <div className={clsx(className, styles.root)}>
-      <select
-        name='statusUser'
-        id='isLogged'
-        onChange={(event) => handleOnChange(event.target.value)}
-      >
-        <option value='true'>View for logged user</option>
-        <option value='false'>View for unlogged user</option>
-      </select>
       
       <AppBar position='static'>
         <Toolbar className={styles.toolbar}>

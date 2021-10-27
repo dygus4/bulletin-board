@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -87,7 +88,7 @@ const Component = ({ className, postsAll, userStatus }) => {
         </div>
       )}
       <div className={styles.card}>
-        {/*postsAll.map((post) => (
+        {postsAll.map((post) => (
           <Card key={post.id} className={styles.card__item}>
             <CardHeader
               avatar={
@@ -104,7 +105,7 @@ const Component = ({ className, postsAll, userStatus }) => {
               subheader={post.publicationDate}
             />
 
-            <CardActionArea>
+            <CardActionArea href={`/post/${post.id}`}>
               <CardMedia
                 className={styles.image}
                 component='img'
@@ -147,7 +148,7 @@ const Component = ({ className, postsAll, userStatus }) => {
               </CardContent>
             </Collapse>
           </Card>
-              ))*/}
+        ))}
       </div>
         
     </div>
