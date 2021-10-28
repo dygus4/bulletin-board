@@ -1,0 +1,16 @@
+@import '../../../styles/settings.scss';
+
+.root {
+    height: 50px;
+    background: #30336b;
+    position: relative;
+    margin-top: 40px;
+  
+    h2{
+      text-align: center;
+      color: #fff;
+      line-height: 50px;
+      margin: 0;
+      font-size: 15px;
+    }
+  }

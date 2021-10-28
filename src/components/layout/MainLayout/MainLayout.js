@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Header } from '../Header/Header.js';
 import Container from '@material-ui/core/Container';
+import { Footer } from '../Footer/Footer';
 
 
 import clsx from 'clsx';
@@ -18,6 +19,8 @@ const Component = ({className, children}) => (
     <Container maxWidth='xl'>
       {children}
     </Container>
+
+    <Footer/>
   </div>
 );
 
