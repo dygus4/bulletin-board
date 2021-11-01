@@ -45,7 +45,7 @@ class Component extends React.Component {
                 variant='outlined'
                 fullWidth
                 inputProps={{ minLength: 20, maxLength: 500 }}
-                defaultValue={post.content}
+                defaultValue={post.text}
               />
               <TextField
                 id='outlined-basic'
@@ -53,7 +53,7 @@ class Component extends React.Component {
                 variant='outlined'
                 className={styles.textField}
                 required
-                defaultValue={post.email}
+                defaultValue={post.author}
               />
               <TextField
                 id='outlined-basic'
@@ -121,7 +121,21 @@ Component.propTypes = {
   className: PropTypes.string,
   match: PropTypes.object,
   params: PropTypes.object,
-  post: PropTypes.object,
+  post: PropTypes.objectOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      title: PropTypes.string,
+      text: PropTypes.string,
+      created: PropTypes.string,
+      updated: PropTypes.string,
+      author: PropTypes.string,
+      status: PropTypes.string,
+      photo: PropTypes.string,
+      price: PropTypes.number,
+      phone: PropTypes.string,
+      location: PropTypes.string,
+    })
+  ),
 };
 
 const mapStateToProps = (state, props) => ({

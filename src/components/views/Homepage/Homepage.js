@@ -1,5 +1,5 @@
 /* eslint-disable linebreak-style */
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Card from '@material-ui/core/Card';
@@ -23,7 +23,7 @@ import clsx from 'clsx';
 import { connect } from 'react-redux';
 
 // import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
-import { getAll } from '../../../redux/postsRedux';
+import { getAll, fetchPublished } from '../../../redux/postsRedux';
 
 import styles from './Homepage.module.scss';
 import { makeStyles } from '@material-ui/core/styles';
@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Component = ({ className, postsAll, userStatus }) => {
+const Component = ({ className, postsAll, userStatus, fetchPublishedPosts }) => {
   
   const [expanded, setExpanded] = React.useState(false);
 
@@ -63,6 +63,10 @@ const Component = ({ className, postsAll, userStatus }) => {
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+  useEffect(() =>{
+    fetchPublishedPosts();
+  });
+  
 
   return (
     <div className={clsx(className, styles.root)}>
@@ -89,7 +93,7 @@ const Component = ({ className, postsAll, userStatus }) => {
       )}
       <div className={styles.card}>
         {postsAll.map((post) => (
-          <Card key={post.id} className={styles.card__item}>
+          <Card key={post._id} className={styles.card__item}>
             <CardHeader
               avatar={
                 <Avatar aria-label='recipe' className={classes.avatar}>
@@ -102,14 +106,14 @@ const Component = ({ className, postsAll, userStatus }) => {
                 </IconButton>
               }
               title={post.title}
-              subheader={post.publicationDate}
+              subheader={post.created}
             />
 
-            <CardActionArea href={`/post/${post.id}`}>
+            <CardActionArea href={`/post/${post._id}`}>
               <CardMedia
                 className={styles.image}
                 component='img'
-                image={post.image}
+                image={post.photo}
                 title={post.title}
               />
               <CardContent>
@@ -144,7 +148,7 @@ const Component = ({ className, postsAll, userStatus }) => {
             </CardActions>
             <Collapse in={expanded} timeout='auto' unmountOnExit>
               <CardContent>
-                <Typography paragraph>{post.content}</Typography>
+                <Typography paragraph>{post.text}</Typography>
               </CardContent>
             </Collapse>
           </Card>
@@ -158,16 +162,17 @@ const Component = ({ className, postsAll, userStatus }) => {
 Component.propTypes = {
   className: PropTypes.string,
   userStatus: PropTypes.bool,
-  postsAll: PropTypes.arrayOf(
+  fetchPublishedPosts: PropTypes.func,
+  postsAll: PropTypes.objectOf(
     PropTypes.shape({
-      id: PropTypes.number,
+      _id: PropTypes.string,
       title: PropTypes.string,
-      content: PropTypes.string,
-      publicationDate: PropTypes.string,
-      updateDate: PropTypes.string,
-      email: PropTypes.string,
+      text: PropTypes.string,
+      created: PropTypes.string,
+      updated: PropTypes.string,
+      author: PropTypes.string,
       status: PropTypes.string,
-      image: PropTypes.string,
+      photo: PropTypes.string,
       price: PropTypes.string,
       phone: PropTypes.string,
       location: PropTypes.string,
@@ -180,11 +185,11 @@ const mapStateToProps = (state) => ({
   userStatus: getStatus(state),
 });
 
-// const mapDispatchToProps = dispatch => ({
-//   loadPosts: () => dispatch(loadPosts()),
-// });
+const mapDispatchToProps = dispatch => ({
+  fetchPublishedPosts: () => dispatch(fetchPublished()),
+});
 
-const Container = connect(mapStateToProps)(Component);
+const Container = connect(mapStateToProps, mapDispatchToProps)(Component);
 
 export {
   // Component as Homepage,

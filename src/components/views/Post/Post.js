@@ -7,7 +7,7 @@ import styles from './Post.module.scss';
 // import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
 
 import { connect } from 'react-redux';
-import { getAll, getOnePost } from '../../../redux/postsRedux';
+import { getPost, fetchPost } from '../../../redux/postsRedux';
 
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
@@ -21,12 +21,16 @@ import LocationOnIcon from '@material-ui/icons/LocationOn';
 import Link from '@material-ui/core/Link';
 import EditIcon from '@material-ui/icons/Edit';
 
-const Component = ({ className, post }) => {
+const Component = ({ className, post, fetchOnePost }) => {
+
+ 
+  fetchOnePost();
+  
   return (
     <div className={clsx(className, styles.root)}>
       <Grid container spacing={3} className={styles.postContainer}>
         <Grid item xs={12} sm={5} md={6}>
-          <img className={styles.postImage} src={post.image} alt='img' />
+          <img className={styles.postImage} src={post.photo} alt='img' />
         </Grid>
         <Grid item xs={12} sm={7} md={6} className={styles.content}>
           <div className={styles.titleWrapper}>
@@ -39,7 +43,7 @@ const Component = ({ className, post }) => {
               {post.title}
             </Typography>
             <Typography className={styles.postStatus}>{post.status}</Typography>
-            <Link href={`/post/${post.id}/edit`} className={styles.postEdit}>
+            <Link href={`/post/${post._id}/edit`} className={styles.postEdit}>
               <Typography className={styles.editContent}>Edit</Typography>
               <EditIcon className={styles.editIcon} />
             </Link>
@@ -50,7 +54,7 @@ const Component = ({ className, post }) => {
             component='p'
             className={styles.postDescription}
           >
-            {post.content}
+            {post.text}
           </Typography>
 
           <div className={styles.postContact}>
@@ -64,7 +68,7 @@ const Component = ({ className, post }) => {
           <div className={styles.postContact}>
             <MailOutlineIcon className={styles.contactIcon} />
             <Typography variant='body2' component='p' className={styles.author}>
-              Email: {post.email}
+              Email: {post.author}
             </Typography>
           </div>
 
@@ -93,10 +97,10 @@ const Component = ({ className, post }) => {
 
           <div className={styles.date}>
             <Typography variant='body2' color='textSecondary' component='p'>
-              Publication: {post.publicationDate}
+              Publication: {post.created}
             </Typography>
             <Typography variant='body2' color='textSecondary' component='p'>
-              Updated: {post.updateDate}
+              Updated: {post.updated}
             </Typography>
           </div>
         </Grid>
@@ -109,19 +113,19 @@ Component.propTypes = {
   className: PropTypes.string,
   params: PropTypes.object,
   post: PropTypes.object,
+  fetchOnePost: PropTypes.func,
   
 };
 
 const mapStateToProps = (state, props) => ({
-  postsAll: getAll(state),
-  post: getOnePost(state, props.match.params.id),
+  post: getPost(state),
 });
 
-// const mapDispatchToProps = dispatch => ({
-//   someAction: arg => dispatch(reduxActionCreator(arg)),
-// });
+const mapDispatchToProps = (dispatch, props) => ({
+  fetchOnePost: () => dispatch(fetchPost(props.match.params.id)),
+});
 
-const Container = connect(mapStateToProps)(Component);
+const Container = connect(mapStateToProps, mapDispatchToProps)(Component);
 
 export {
   // Component as Post,

@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import styles from './PostAdd.module.scss';
 import { connect } from 'react-redux';
 import { getStatus } from '../../../redux/userSwitcherRedux.js';
+import {fetchAddPost} from '../../../redux/postsRedux';
 
 import { NotFound } from '../NotFound/NotFound.js';
 
@@ -34,87 +35,38 @@ class Component extends React.Component {
     },
   };
 
-  setPhoto = (files) => {
+  updateTextField = ({ target }) => {
     const { post } = this.state;
-    console.log(files[0]);
+    const { name, value } = target;
 
-    if (files) this.setState({ post: { ...post, photo: files[0] } });
-    else this.setState({ post: { ...post, photo: null } });
+    this.setState({ post: { ...post, [name]: value } });
   };
 
-  handleChange = (event) => {
-    const { post } = this.state;
+  newDate = () => {
+    const dateObj = new Date();
+    const month = dateObj.getUTCMonth() + 1; //months from 1-12
+    const day = dateObj.getUTCDate();
+    const year = dateObj.getUTCFullYear();
 
-    this.setState({
-      post: { ...post, [event.target.name]: event.target.value },
-    });
+    let newdate = day + '/' + month + '/' + year;
+    return newdate;
   };
 
-  submitForm = (event) => {
+  submitForm = (e) => {
+    e.preventDefault();
     const { post } = this.state;
-    event.preventDefault();
-
-    let error = null;
-    const emailPattern = new RegExp(
-      '^[a-zA-Z0-9][a-zA-Z0-9_.-]+@[a-zA-Z0-9][a-zA-Z0-9_.-]+.{1,3}[a-zA-Z]{2,4}'
-    );
-
-    if (post.title.length < 10) {
-      alert('The title is too short');
-      error = 'text too short';
-    } else if (post.text.length < 20) {
-      alert('The content is too short');
-      error = 'text too short';
-    } else if (!emailPattern.test(post.author)) {
-      alert('Your email adress is not valid!');
-      error = 'wrong email';
-    }
-    if (!error) {
-      post.updated = new Date().toISOString();
-
-      const formData = new FormData();
-
-      console.log(post);
-
-      for (let key of [
-        'author',
-        'created',
-        'updated',
-        'status',
-        'title',
-        'text',
-        'price',
-        'phone',
-        'location',
-        'photo',
-      ]) {
-        formData.append(key, post[key]);
-      }
-
-      this.setState({
-        post: {
-          _id: '',
-          author: '',
-          created: '',
-          updated: '',
-          status: '',
-          title: '',
-          text: '',
-          photo: '',
-          price: '',
-          phone: '',
-          location: '',
-        },
-      });
-      alert('Your changes have been saved!');
-    } else {
-      alert('Please correct errors before submitting changes!');
-    }
+    const { addPost } = this.props;
+    this.setState({ post: { ...post,  created: this.newDate() } });
+    setTimeout(() => {
+      addPost(this.state.post);
+    }, 1000);
   };
 
   render() {
+    const { updateTextField, submitForm } = this;
     const { className, userStatus } = this.props;
     const { post } = this.state;
+
 
     return (
       <div className={clsx(className, styles.root)}>
@@ -124,7 +76,7 @@ class Component extends React.Component {
           <Grid align='center' justifyContent='center'>
             <Grid item align='center' xs={12} sm={9}>
               <Paper className={styles.form}>
-                <form onSubmit={this.submitForm}>
+                <form onSubmit={submitForm}>
                   <Typography variant='h6' className={styles.title} >
                     Fill the fields to add an announcement
                   </Typography>
@@ -135,7 +87,7 @@ class Component extends React.Component {
                       name='title'
                       label='Title'
                       variant='filled'
-                      onChange={this.handleChange}
+                      onChange={updateTextField}
                       helperText='min. 10 characters'
                       fullWidth
                     />
@@ -146,7 +98,7 @@ class Component extends React.Component {
                       name='text'
                       label='Give the full description!'
                       variant='filled'
-                      onChange={this.handleChange}
+                      onChange={updateTextField}
                       helperText='min. 20 characters'
                       fullWidth
                     />
@@ -157,7 +109,7 @@ class Component extends React.Component {
                       name='author'
                       label='Your Email'
                       variant='filled'
-                      onChange={this.handleChange}
+                      onChange={updateTextField}
                       helperText='Put your vaild email'
                       fullWidth
                     />
@@ -168,7 +120,7 @@ class Component extends React.Component {
                       name='location'
                       label='Location'
                       variant='filled'
-                      onChange={this.handleChange}
+                      onChange={updateTextField}
                       helperText='Location'
                       fullWidth
                     />
@@ -179,7 +131,7 @@ class Component extends React.Component {
                       name='price'
                       label='Price'
                       variant='filled'
-                      onChange={this.handlePrice}
+                      onChange={updateTextField}
                       helperText='Price in EUR'
                       fullWidth
                     />
@@ -190,7 +142,7 @@ class Component extends React.Component {
                       name='phone'
                       label='Phone number'
                       variant='filled'
-                      onChange={this.handleChange}
+                      onChange={updateTextField}
                       helperText='Give you contact number'
                       fullWidth
                     />
@@ -247,17 +199,18 @@ class Component extends React.Component {
 Component.propTypes = {
   className: PropTypes.string,
   userStatus: PropTypes.bool,
+  addPost: PropTypes.func,
 };
 
 const mapStateToProps = (state, props) => ({
   userStatus: getStatus(state),
 });
 
-// const mapDispatchToProps = (dispatch, props) => ({
-//   updatePost: (post) => dispatch(editPostRequest(post, props.match.params.id)),
-// });
+const mapDispatchToProps = (dispatch) => ({
+  addPost: (post) => dispatch(fetchAddPost(post)),
+});
 
-const Container = connect(mapStateToProps)(Component);
+const Container = connect(mapStateToProps, mapDispatchToProps)(Component);
 
 export {
   // Component as PostAdd,
