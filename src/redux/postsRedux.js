@@ -151,7 +151,7 @@ export const reducer = (statePart = [], action = {}) => {
         ...statePart,
         data: [
           ...statePart.data.map((post) =>
-            post._id === action.payload._id ? action.payload : post
+            post.id === action.payload.id ? action.payload : post
           ),
         ],
       };

@@ -59,7 +59,23 @@ class Component extends React.Component {
     this.setState({ post: { ...post,  created: this.newDate() } });
     setTimeout(() => {
       addPost(this.state.post);
+      this.setState ( {
+        post: {
+          author: '',
+          created: '',
+          updated: '',
+          status: '',
+          title: '',
+          text: '',
+          photo: null,
+          price: '',
+          phone: '',
+          location: '',
+        },
+      } 
+      );
     }, 1000);
+    
   };
 
   render() {
