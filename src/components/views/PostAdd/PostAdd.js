@@ -52,8 +52,8 @@ class Component extends React.Component {
     return newdate;
   };
 
-  submitForm = (e) => {
-    e.preventDefault();
+  submitForm = (event) => {
+    event.preventDefault();
     const { post } = this.state;
     const { addPost } = this.props;
     this.setState({ post: { ...post,  created: this.newDate() } });
