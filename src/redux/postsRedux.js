@@ -77,15 +77,15 @@ export const fetchAddPost = (post) => {
 };
 
 
-export const fetchEditPost = (id, post) => {
+export const fetchEditPost = (_id, post) => {
   console.log('post w fetchEditPost', post);
   return (dispatch, getState) => {
     dispatch(fetchStarted());
-    Axios.put(`http://localhost:8000/api/posts/${id}/edit`, post, {
+    Axios.put(`http://localhost:8000/api/posts/${_id}/edit`, post, {
     
     })
       .then((res) => {
-        dispatch(editPost(id, post));
+        dispatch(editPost(_id, post));
       })
       .catch((err) => {
         dispatch(fetchError(err.message || true));
@@ -151,7 +151,7 @@ export const reducer = (statePart = [], action = {}) => {
         ...statePart,
         data: [
           ...statePart.data.map((post) =>
-            post.id === action.payload.id ? action.payload : post
+            post._id === action.payload._id ? action.payload : post
           ),
         ],
       };

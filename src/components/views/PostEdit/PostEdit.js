@@ -18,7 +18,7 @@ import FormControl from '@material-ui/core/FormControl';
 import clsx from 'clsx';
 
 import { connect } from 'react-redux';
-import { fetchEditPost, getPost } from '../../../redux/postsRedux';
+import { fetchEditPost, getPost, fetchPost } from '../../../redux/postsRedux';
 
 import styles from './PostEdit.module.scss';
 
@@ -26,17 +26,17 @@ class Component extends React.Component {
 
   state = {
     post: {
-      _id: this.props.postById._id,
-      title: this.props.postById.title,
-      text: this.props.postById.text,
-      price: this.props.postById.price,
-      photo: this.props.postById.photo,
-      author: this.props.postById.author,
-      location: this.props.postById.location,
-      phone: this.props.postById.phone,
-      status: this.props.postById.status,
-      created: this.props.postById.created,
-      updated: this.props.postById.updated,
+      _id: this.props.isLoading._id,
+      title: this.props.isLoading.title,
+      text: this.props.isLoading.text,
+      price: this.props.isLoading.price,
+      photo: this.props.isLoading.photo,
+      author: this.props.isLoading.author,
+      location: this.props.isLoading.location,
+      phone: this.props.isLoading.phone,
+      status: this.props.isLoading.status,
+      created: this.props.isLoading.created,
+      updated: this.props.isLoading.updated,
     },
   };
 
@@ -71,36 +71,46 @@ class Component extends React.Component {
     const { editPost } = this.props;
     event.preventDefault();
 
-    if (post.title.length < 10) return alert('Min. 10 characters in title');
-    if (post.text.length < 20) return alert('Min. 20 characters in text');
-    if (post.price <= 0) return alert('Wrong price');
-    const authorPattern = new RegExp(
-      '^[a-zA-Z0-9][a-zA-Z0-9_.-]+@[a-zA-Z0-9][a-zA-Z0-9_.-]+.{1,3}[a-zA-Z]{2,4}'
-    );
-    const authorMatched = post.author.match(authorPattern);
-    const authorMatchedJoined = (authorMatched || []).join('');
-    if (authorMatchedJoined.length < post.author.length)
-      return alert('Wrong format email');
+    //if (post.title.length < 10) return alert('Min. 10 characters in title');
+    //if (post.text.length < 20) return alert('Min. 20 characters in text');
+    //if (post.price <= 0) return alert('Wrong price');
+    //const authorPattern = new RegExp(
+    //  '^[a-zA-Z0-9][a-zA-Z0-9_.-]+@[a-zA-Z0-9][a-zA-Z0-9_.-]+.{1,3}[a-zA-Z]{2,4}'
+    //);
+    //const authorMatched = post.author.match(authorPattern);
+    //const authorMatchedJoined = (authorMatched || []).join('');
+    //if (authorMatchedJoined.length < post.author.length)
+    //  return alert('Wrong format email');
 
-    if (
-      post.title.length > 9 &&
-      post.text.length > 19 &&
-      post.author.length === authorMatchedJoined.length
-    ) {
-      // post._id = uniqid();
-      post.updated = new Date().toISOString();
-      editPost(post);
+    //if (
+    //  post.title.length > 9 &&
+    //  post.text.length > 19 &&
+    //  post.author.length === authorMatchedJoined.length
+    //) {
+    // post._id = uniqid();
+    post.updated = new Date().toISOString();
+    editPost(post);
 
-      alert('Your post was edit.');
-    }
+    //alert('Your post was edit.');
+    //}
   };
 
+  componentDidMount() {
+    this.props.fetchOnePost();
+  }
+    
   render() {
-    const { className, postById, user } = this.props;
+    const { className, postById, user, isLoading } = this.props;
     const { post } = this.state;
-
+    
     console.log('postById w postEdit', postById);
-
+    
+    if (isLoading) {
+      return (
+        <div>Loading</div>
+      );
+    }
+    
     return (
       <div className={clsx(className, styles.root)}>
         <h2>Edit &quot;{postById.title}&quot; </h2>
@@ -254,15 +264,19 @@ Component.propTypes = {
   addPost: PropTypes.func,
   editPost: PropTypes.func,
   user: PropTypes.object,
+  fetchOnePost: PropTypes.func,
+  isLoading: PropTypes.bool,
 };
 
 const mapStateToProps = (state, props) => ({
   postById: getPost(state),
   user: state.user,
+  isLoading: state.posts.loading.active,
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = (dispatch, props) => ({
   editPost: (post) => dispatch(fetchEditPost(post)),
+  fetchOnePost: () => dispatch(fetchPost(props.match.params.id)),
 });
 
 const Container = connect(mapStateToProps, mapDispatchToProps)(Component);

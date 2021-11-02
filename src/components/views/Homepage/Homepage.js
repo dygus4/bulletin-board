@@ -163,7 +163,7 @@ Component.propTypes = {
   className: PropTypes.string,
   userStatus: PropTypes.bool,
   fetchPublishedPosts: PropTypes.func,
-  postsAll: PropTypes.objectOf(
+  postsAll: PropTypes.arrayOf(
     PropTypes.shape({
       _id: PropTypes.string,
       title: PropTypes.string,
@@ -173,7 +173,7 @@ Component.propTypes = {
       author: PropTypes.string,
       status: PropTypes.string,
       photo: PropTypes.string,
-      price: PropTypes.string,
+      price: PropTypes.number,
       phone: PropTypes.string,
       location: PropTypes.string,
     })
