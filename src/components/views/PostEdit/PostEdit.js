@@ -26,17 +26,17 @@ class Component extends React.Component {
 
   state = {
     post: {
-      _id: this.props.isLoading._id,
-      title: this.props.isLoading.title,
-      text: this.props.isLoading.text,
-      price: this.props.isLoading.price,
-      photo: this.props.isLoading.photo,
-      author: this.props.isLoading.author,
-      location: this.props.isLoading.location,
-      phone: this.props.isLoading.phone,
-      status: this.props.isLoading.status,
-      created: this.props.isLoading.created,
-      updated: this.props.isLoading.updated,
+      _id: this.props.postById._id,
+      title: this.props.postById.title,
+      text: this.props.postById.text,
+      price: this.props.postById.price,
+      photo: this.props.postById.photo,
+      author: this.props.postById.author,
+      location: this.props.postById.location,
+      phone: this.props.postById.phone,
+      status: this.props.postById.status,
+      created: this.props.postById.created,
+      updated: this.props.postById.updated,
     },
   };
 
@@ -110,6 +110,7 @@ class Component extends React.Component {
         <div>Loading</div>
       );
     }
+    
     
     return (
       <div className={clsx(className, styles.root)}>
