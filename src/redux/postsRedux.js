@@ -66,7 +66,9 @@ export const fetchAddPost = (post) => {
 
   return (dispatch, getState) => {
     dispatch(fetchStarted());
-    Axios.post('http://localhost:8000/api/posts/add', post)
+    Axios.post('http://localhost:8000/api/posts/add', post,
+      {headers: { 'Content-Type': 'application/json' },
+      })
       .then((res) => {
         dispatch(addPost(post));
       })
@@ -77,15 +79,15 @@ export const fetchAddPost = (post) => {
 };
 
 
-export const fetchEditPost = (_id, post) => {
+export const fetchEditPost = (id, post) => {
   console.log('post w fetchEditPost', post);
   return (dispatch, getState) => {
     dispatch(fetchStarted());
-    Axios.put(`http://localhost:8000/api/posts/${_id}/edit`, post, {
+    Axios.put(`http://localhost:8000/api/posts/${id}/edit`, post, {
     
     })
       .then((res) => {
-        dispatch(editPost(_id, post));
+        dispatch(editPost(id, post));
       })
       .catch((err) => {
         dispatch(fetchError(err.message || true));

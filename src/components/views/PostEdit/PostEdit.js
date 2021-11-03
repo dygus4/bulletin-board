@@ -89,7 +89,7 @@ class Component extends React.Component {
     //) {
     // post._id = uniqid();
     post.updated = new Date().toISOString();
-    editPost(post);
+    editPost(post._id, post);
 
     //alert('Your post was edit.');
     //}
@@ -98,6 +98,22 @@ class Component extends React.Component {
   componentDidMount() {
     this.props.fetchOnePost();
   }
+
+  state = {
+    post: {
+      _id: this.props.postById._id,
+      title: this.props.postById.title,
+      text: this.props.postById.text,
+      price: this.props.postById.price,
+      photo: this.props.postById.photo,
+      author: this.props.postById.author,
+      location: this.props.postById.location,
+      phone: this.props.postById.phone,
+      status: this.props.postById.status,
+      created: this.props.postById.created,
+      updated: this.props.postById.updated,
+    },
+  };
     
   render() {
     const { className, postById, user, isLoading } = this.props;
@@ -276,7 +292,8 @@ const mapStateToProps = (state, props) => ({
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
-  editPost: (post) => dispatch(fetchEditPost(post)),
+ 
+  editPost: (id, post) => dispatch(fetchEditPost(id, post)),
   fetchOnePost: () => dispatch(fetchPost(props.match.params.id)),
 });
 

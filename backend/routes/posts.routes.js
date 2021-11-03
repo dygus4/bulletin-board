@@ -41,7 +41,7 @@ router.post('/posts/add', async (req, res) => {
       location,
       created,
       updated,
-      mail,
+      
     } = req.body;
     const newPost = new Post({
       title: title,
@@ -54,7 +54,6 @@ router.post('/posts/add', async (req, res) => {
       price: price,
       phone: phone,
       location: location,
-      mail: mail,
     });
 
     await newPost.save();
@@ -79,7 +78,7 @@ router.put(`/posts/:id/edit`, async (req, res) => {
       price,
       phone,
       location,
-      mail,
+      
     } = req.body;
 
     const editedPost = await Post.findById(req.params.id);
@@ -99,7 +98,6 @@ router.put(`/posts/:id/edit`, async (req, res) => {
             price,
             phone,
             location,
-            mail,
           },
         }
       );
